@@ -2,25 +2,7 @@ import requests
 import bs4 as bs
 import lxml.etree as le
 import time
-
-
-class pilot:
-    def __init__(self) -> None:
-        pass
-
-    def lisaa_nro(nro):
-        pilot.number = nro
-
-    def lisaa_x(x):
-        pilot.x = x
-
-    def lisaa_y(y):
-        pilot.y = y
-
-    def print():
-        print(pilot.number, pilot.x, pilot.y)
-
-
+import pilotinfo
 url = "https://assignments.reaktor.com/birdnest/drones"
 
 
@@ -43,12 +25,12 @@ def get_data(url):
     number = 1
     pilotlist = []
     for i in range(len(result_x)):
-        pilot_ = pilot
-        pilot.lisaa_nro(number)
+        pilot_ = pilotinfo.pilot
+        pilotinfo.pilot.lisaa_nro(number)
         number += 1
-        pilot.lisaa_x(float(result_x[i]))
-        pilot.lisaa_y(float(result_y[i]))
-        pilot.print()
+        pilotinfo.pilot.lisaa_x(float(result_x[i]))
+        pilotinfo.pilot.lisaa_y(float(result_y[i]))
+        pilotinfo.pilot.print()
         if pilot_.y in range(150000, 350000) and pilot_.x in range(150000, 350000):
             print(f"Pilot {pilot.number} is in the zone!")
         else:
