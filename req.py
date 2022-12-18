@@ -36,7 +36,7 @@ def get_data(url):
         else:
             print(f"Pilot {pilot_.number} is not in the zone!")
         pilotlist.append(pilot_)
-        time.sleep(5)
+    time.sleep(5)
     get_data(url)
 
 
