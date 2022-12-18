@@ -32,9 +32,9 @@ def get_data(url):
         pilotinfo.pilot.lisaa_y(float(result_y[i]))
         pilotinfo.pilot.print()
         if pilot_.y in range(150000, 350000) and pilot_.x in range(150000, 350000):
-            print(f"Pilot {pilot.number} is in the zone!")
+            print(f"Pilot {pilot_.number} is in the zone!")
         else:
-            print(f"Pilot {pilot.number} is not in the zone!")
+            print(f"Pilot {pilot_.number} is not in the zone!")
         pilotlist.append(pilot_)
         time.sleep(5)
     get_data(url)
