@@ -12,4 +12,7 @@ class pilot:
         pilot.y = y
 
     def print():
-        print(pilot.number, pilot.x, pilot.y)
+        print(pilot.number, pilot.x, pilot.y, pilot.serial)
+
+    def add_serial(serial):
+        pilot.serial = serial
