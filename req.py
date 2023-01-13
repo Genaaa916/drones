@@ -5,7 +5,6 @@ import time
 import json
 import pilotinfo
 import math
-url = "https://assignments.reaktor.com/birdnest/drones"
 
 
 def find_info(serialnumber):
@@ -36,7 +35,8 @@ def get_pilot_info(pilot: pilotinfo.pilot):
     pilot.lisaa_pilot_tiedot(pilot_contact)
 
 
-def get_data(url):
+def get_data():
+    url = "https://assignments.reaktor.com/birdnest/drones"
     result = bs.BeautifulSoup(requests.get(url).text, 'lxml')
     soupy, serial, soupx = result.find_all("positiony"), result.find_all(
         "serialnumber"), result.find_all("positionx")
@@ -61,8 +61,8 @@ def get_data(url):
                 print(i)
                 pilotlist.add_printed(i)
     time.sleep(5)
-    get_data(url)
+    get_data()
 
 
 pilotlist = pilotinfo.pilot_list()
-get_data(url)
+get_data()
