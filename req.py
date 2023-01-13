@@ -2,8 +2,9 @@ import requests
 import bs4 as bs
 import lxml.etree as le
 import time
+import json
 import pilotinfo
-import funcs
+import math
 url = "https://assignments.reaktor.com/birdnest/drones"
 
 
@@ -16,47 +17,52 @@ def find_info(serialnumber):
     return info
 
 
-def get_data(url):
-    r = requests.get(url)
-    r = r.text
-    result = bs.BeautifulSoup(r, 'lxml')
-    soupy = result.find_all("positiony")
-    serial = result.find_all("serialnumber")
-    soupx = result.find_all("positionx")
-    """ print(serial) """
+def in_radius(center_x, center_y, radius, x, y):
+    distance = math.sqrt((center_x - x) ** 2 + (center_y - y) ** 2)
+    return distance <= radius
 
-    result_y = []
-    result_x = []
-    for i in soupy:
-        result_y.append(i.text)
-    for i in soupx:
-        result_x.append(i.text)
+
+def get_pilot_info(pilot: pilotinfo.pilot):
+    serial = pilot.serial
+    pilot_url = f"https://assignments.reaktor.com/birdnest/pilots/{serial}"
+    pilotlist.add_pilot(pilot)
+    p_result = bs.BeautifulSoup(requests.get(
+        pilot_url).text, 'html.parser')
+    p_result_json = json.loads(p_result.string)
+    pilot_contact = [p_result_json.get(
+        "phoneNumber"), p_result_json.get("firstName"),
+        p_result_json.get("lastName"),
+        p_result_json.get("email")]
+    pilot.lisaa_pilot_tiedot(pilot_contact)
+
+
+def get_data(url):
+    result = bs.BeautifulSoup(requests.get(url).text, 'lxml')
+    soupy, serial, soupx = result.find_all("positiony"), result.find_all(
+        "serialnumber"), result.find_all("positionx")
+    result_y, result_x = [i.text for i in soupy], [i.text for i in soupx]
     result = result_y + result_x
 
-    print(result)
     info = "no info"
     number = 1
-    pilotlist = []
+    radius, center_x, center_y = 100000, 250000, 250000
     for i in range(len(result_x)):
-        pilot_ = pilotinfo.pilot
-        pilotinfo.pilot.lisaa_nro(number)
-        pilotinfo.pilot.lisaa_x(float(result_x[i]))
-        pilotinfo.pilot.lisaa_y(float(result_y[i]))
-        pilotinfo.pilot.add_serial(serial[i].text)
-        pilotinfo.pilot.print()
+        pilot_ = pilotinfo.pilot(serial[i].text)
+        pilot_.lisaa_nro(number)
+        pilot_.lisaa_x(float(result_x[i]))
+        pilot_.lisaa_y(float(result_y[i]))
         number += 1
         """ TODO: the parsing below is not working, fix it """
-        if pilot_.y in range(150000, 350000) and pilot_.x in range(150000, 350000):
-            print(f"Pilot {pilot_.number} is in the zone!")
-            print(pilot_.serial)
-            find_info(pilot_.serial)
-
-        else:
-            print(f"Pilot {pilot_.number} is not in the zone!")
-
-        pilotlist.append(pilot_)
+        if in_radius(center_y, center_x, radius, pilot_.x, pilot_.y):
+            get_pilot_info(pilot_)
+    if len(pilotlist.list) > 0:
+        for i in pilotlist.list:
+            if i not in pilotlist.printed_list:
+                print(i)
+                pilotlist.add_printed(i)
     time.sleep(5)
     get_data(url)
 
 
+pilotlist = pilotinfo.pilot_list()
 get_data(url)
