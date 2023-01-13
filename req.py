@@ -16,7 +16,7 @@ def find_info(serialnumber):
     return info
 
 
-def in_radius(center_x, center_y, radius, x, y):
+def in_ndz(center_x, center_y, radius, x, y):
     distance = math.sqrt((center_x - x) ** 2 + (center_y - y) ** 2)
     return distance <= radius
 
@@ -53,7 +53,7 @@ def get_data():
         pilot_.lisaa_y(float(result_y[i]))
         number += 1
         """ TODO: the parsing below is not working, fix it """
-        if in_radius(center_y, center_x, radius, pilot_.x, pilot_.y):
+        if in_ndz(center_y, center_x, radius, pilot_.x, pilot_.y):
             get_pilot_info(pilot_)
     if len(pilotlist.list) > 0:
         for i in pilotlist.list:
