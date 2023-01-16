@@ -59,6 +59,7 @@ def get_data():
         for i in pilotlist.list:
             if i not in pilotlist.printed_list:
                 print(i)
+                i.write_to_file()
                 pilotlist.add_printed(i)
     time.sleep(10)
     get_data()

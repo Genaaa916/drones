@@ -29,6 +29,10 @@ class pilot:
     def add_serial(self, serial):
         self.serial = serial
 
+    def write_to_file(self):
+        with open("pilots.txt", "a") as f:
+            f.write(f"{self.__str__()}\n")
+
 
 class pilot_list:
     def __init__(self):
@@ -46,3 +50,6 @@ class pilot_list:
     def add_pilot(self, pilot: pilot):
         if pilot.serial not in self.return_serials():
             self.list.append(pilot)
+
+    def pilot_text(self):
+        return f"\nPilot name: {(self.nimi)}\nEmail: {self.mail}\nPhone number: {self.puhelinnumero}"
