@@ -60,7 +60,7 @@ def get_data():
             if i not in pilotlist.printed_list:
                 print(i)
                 pilotlist.add_printed(i)
-    time.sleep(5)
+    time.sleep(10)
     get_data()
 
 
