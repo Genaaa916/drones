@@ -1,6 +1,5 @@
 import requests
 import bs4 as bs
-import lxml.etree as le
 import time
 import json
 import pilotinfo
@@ -22,8 +21,7 @@ def in_ndz(center_x, center_y, radius, x, y):
 
 
 def get_pilot_info(pilot: pilotinfo.pilot):
-    serial = pilot.serial
-    pilot_url = f"https://assignments.reaktor.com/birdnest/pilots/{serial}"
+    pilot_url = f"https://assignments.reaktor.com/birdnest/pilots/{pilot.serial}"
     pilotlist.add_pilot(pilot)
     p_result = bs.BeautifulSoup(requests.get(
         pilot_url).text, 'html.parser')
